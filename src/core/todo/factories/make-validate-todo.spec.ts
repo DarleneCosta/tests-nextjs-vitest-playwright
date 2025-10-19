@@ -35,8 +35,6 @@ describe('makeValidateTodo unit test', () => {
 
         const result = makeValidateTodo(description) as ValidTodo;
 
-        console.log(result);
-
         expect(result.data.description).toEqual(description);
         expect(result.data.createdAt).toEqual(expect.any(Date));
         expect(result.data.id).toEqual(expect.any(String));
@@ -48,7 +46,7 @@ describe('makeValidateTodo unit test', () => {
     it('should return validateTodoDescription.errors if validateTodoDescription is not successful', () => {
         const errors = ['Error', 'any'];
         const { validateTodoDescriptionSpy, description } = makeMocks();
-        
+
         validateTodoDescriptionSpy.mockReturnValue({ success: false, errors });
         
         const result = makeValidateTodo(description) as InvalidTodo;
