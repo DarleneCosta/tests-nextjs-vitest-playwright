@@ -2,7 +2,7 @@ import * as sanitizeStringModule from "@/core/utils/sanitize-str";
 import { makeValidateTodo } from "./make-validate-todo";
 import * as validateTodoDescriptionModule from "../schemas/validate-todo-description";
 import * as makeNewTodoModule from "./make-new-todo";
-import { InvalidTodo, ValidTodo } from "./make-validate-todo";
+import { InvalidTodo, ValidTodo } from "../schemas/todo.contract";
 
 describe('makeValidateTodo unit test', () => {
     it('should call the sanitizeString function with the correct value', () => {
@@ -35,9 +35,10 @@ describe('makeValidateTodo unit test', () => {
 
         const result = makeValidateTodo(description) as ValidTodo;
 
-        expect(result.data.description).toEqual(description);
-        expect(result.data.createdAt).toEqual(expect.any(Date));
-        expect(result.data.id).toEqual(expect.any(String));
+        expect(result.success).toBe(true);
+        expect(result.todo.description).toEqual(description);
+        expect(result.todo.createdAt).toEqual(expect.any(Date));
+        expect(result.todo.id).toEqual(expect.any(String));
         expect(makeNewTodoSpy).toHaveBeenCalledWith(description);
         expect(makeNewTodoSpy).toHaveBeenCalledTimes(1);
 
