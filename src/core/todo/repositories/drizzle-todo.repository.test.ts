@@ -65,7 +65,12 @@ describe('DrizzleTodoRepository (integration)', () => {
       const { repository, todos } = await makeTestTodoRepository();
 
       await repository.create(todos[0]);
-      const result = await repository.create(todos[0]);
+      const anotherTodo = {
+        id: 'another-id',
+        description: todos[0].description,
+        createdAt: 'another-date',
+      };
+      const result = await repository.create(anotherTodo);
 
       expect(result).toEqual({
         success: false,
