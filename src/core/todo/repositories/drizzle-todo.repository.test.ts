@@ -3,7 +3,6 @@ import {
   makeTestTodoRepository,
 } from '@/core/__tests__/utils/make-test-todo-repository';
 import { makeNewTodo } from '../factories/make-new-todo';
-import { TodoPresenter, ValidTodo } from '../schemas/todo.contract';
 
 describe('DrizzleTodoRepository (integration)', () => {
   beforeEach(async () => {
@@ -42,7 +41,7 @@ describe('DrizzleTodoRepository (integration)', () => {
     it('should create todo if data is valid', async () => {
       const { repository, todos } = await makeTestTodoRepository();
 
-      const result = (await repository.create(todos[0])) as ValidTodo;
+      const result = (await repository.create(todos[0]));
 
       expect(result).toStrictEqual({
         success: true,
@@ -79,7 +78,22 @@ describe('DrizzleTodoRepository (integration)', () => {
     });
   });
   describe('remove', () => {
-    it('should remove todo if id exists', async () => {});
-    it('should fail if todo does not exist', async () => {});
+    it('should remove todo if id exists', async () => {
+      const { repository, todos } = await makeTestTodoRepository();
+      await repository.create(todos[0]);
+      const result = await repository.remove(todos[0].id);
+      expect(result).toEqual({
+        success: true,
+        todo: todos[0],
+      });
+    });
+    it('should fail if todo does not exist', async () => {
+      const { repository, todos } = await makeTestTodoRepository();
+      const result = await repository.remove(todos[0].id);
+      expect(result).toEqual({
+        success: false,
+        errors: ['Todo não encontrado.'],
+      });
+    });
   });
 });
