@@ -1,4 +1,4 @@
-import { join, resolve } from 'path';
+import { resolve } from 'path';
 
 const commonKeys = {
   drizzleSchemaFiles: [
@@ -34,32 +34,31 @@ type ConfigsByEnv = {
   readonly databaseFile: string;
   readonly currentEnv: keyof EnvConfigs;
 } & typeof commonKeys;
-  
 
-  type EnvConfigs = typeof envConfigs;
-  type AllowedEnvKeys = keyof EnvConfigs;
-  
-  function isValidEnv(env: string): env is AllowedEnvKeys {
-    return Object.keys(envConfigs).includes(env);
+type EnvConfigs = typeof envConfigs;
+type AllowedEnvKeys = keyof EnvConfigs;
+
+function isValidEnv(env: string): env is AllowedEnvKeys {
+  return Object.keys(envConfigs).includes(env);
+}
+
+export function checkEnv(): AllowedEnvKeys {
+  const currentEnv = process.env.CURRENT_ENV;
+
+  if (!currentEnv || !isValidEnv(currentEnv)) {
+    throw new Error('Verifique os .env* e os valores em src/env/configs.ts');
   }
-  
-  export function checkEnv(): AllowedEnvKeys {
-    const currentEnv = process.env.CURRENT_ENV;
-  
-    if (!currentEnv || !isValidEnv(currentEnv)) {
-      throw new Error('Verifique os .env* e os valores em src/env/configs.ts');
-    }
-  
-    return currentEnv;
-  }
-  
-  export function getFullEnv() {
-    const currentEnv = checkEnv();
-    return envConfigs[currentEnv];
-  }
-  
-  export function getEnv<C extends keyof ConfigsByEnv>(key: C) {
-    const currentEnv = checkEnv();
-    const value = envConfigs[currentEnv][key];
-    return value;
-  }
+
+  return currentEnv;
+}
+
+export function getFullEnv() {
+  const currentEnv = checkEnv();
+  return envConfigs[currentEnv];
+}
+
+export function getEnv<C extends keyof ConfigsByEnv>(key: C) {
+  const currentEnv = checkEnv();
+  const value = envConfigs[currentEnv][key];
+  return value;
+}
