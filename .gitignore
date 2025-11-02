@@ -26,6 +26,7 @@
 
 # sqlite
 dev.db.sqlite3
+.int.test.db.sqlite3
 
 # debug
 npm-debug.log*
