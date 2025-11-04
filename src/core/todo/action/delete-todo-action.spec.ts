@@ -33,4 +33,5 @@ describe('deleteTodoAction (unit)', () => {
 
     expect(revalidatePathMocked).toHaveBeenCalledExactlyOnceWith('/');
   });
+  
 });
